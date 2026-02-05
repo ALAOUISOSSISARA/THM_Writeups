@@ -1,6 +1,6 @@
 # Windows Privilege Escalation
 
-[**Unquoted Service Path**](Windows_Privilege_Escalation/Unquoted_Service_Path.md)
+[**Unquoted Service Path**](Windows Privilege Escalation/Unquoted_Service_Path.md)
 
 [**Insecure Service Permissions**](Windows_Privilege_Escalation/Insecure_Service_Permissions.md)
 
