@@ -1,8 +1,8 @@
 # Windows Privilege Escalation
 
-[**Unquoted Service Path**](Windows Privilege Escalation/Unquoted_Service_Path.md)
+[**Unquoted Service Path**](Windows%20Privilege%20Escalation/Unquoted_Service_Path.md)
 
-[**Insecure Service Permissions**](Windows_Privilege_Escalation/Insecure_Service_Permissions.md)
+[**Insecure Service Permissions**](Windows%20Privilege%20Escalation/Insecure_Service_Permissions.md)
 
 [Abusing dangerous privileges](Windows%20Privilege%20Escalation/Abusing%20dangerous%20privileges%202fcbce80cb378061b151ffeb6c6d68e6.md)
 
